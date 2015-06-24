@@ -1,0 +1,62 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'idea'
+apply plugin: 'org.akhikhl.gretty'
+apply plugin: 'groovy'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+version = '1.0'
+
+repositories {
+    mavenCentral()
+    maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
+}
+
+dependencies {
+    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
+    compile group: 'org.springframework', name: 'spring-webmvc', version: '4.1.6.RELEASE'
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.17.0.RELEASE'
+    compile 'com.fasterxml.jackson.core:jackson-databind'
+    compile 'javax.servlet:jstl:1.2'
+    compile 'org.springframework.plugin:spring-plugin-core:1.1.0.RELEASE'
+    compile 'org.springframework.data:spring-data-jpa:1.8.0.RELEASE'
+    compile 'com.h2database:h2'
+    compile 'org.hibernate:hibernate-entitymanager:4.3.1.Final'
+
+    compile 'org.codehaus.groovy:groovy-all:2.3.9'
+
+    runtime 'org.hsqldb:hsqldb:2.0.0'
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+//Gretty Embedded Jetty
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'org.akhikhl.gretty:gretty:+'
+  }
+}
+
+gretty {
+  port = 8080
+  contextPath = 'demo'
+  servletContainer = 'jetty9' //tomcat7 or tomcat8
+}
+
+task sqlGenerate(type: JavaExec, dependsOn: build) {
+
+    main = "ru.koleslena.demo.generate.SqlGenerator"
+    classpath = sourceSets.main.runtimeClasspath
+    workingDir = file(rootProject.projectDir)
+
+
+    doFirst {
+        // clean only if generate is not up-to-date
+        tasks.cleanSqlGenerate.execute()
+    }
+}
