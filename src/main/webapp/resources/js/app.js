@@ -14,7 +14,7 @@ var Item = React.createClass({
 var NavigateLink = React.createClass({
     render: function () {
         return (
-            <button onClick={this.props.onClick}>{this.props.name}</button>
+            <button className="navigateLink" onClick={this.props.onClick}>{this.props.name}</button>
         );
     }
 });
@@ -22,7 +22,7 @@ var NavigateLink = React.createClass({
 var PagePanel = React.createClass({
     render: function () {
         return (
-            <div>Page {this.props.pageNumber + 1}/ TotalPages {this.props.totalPages}</div>
+            <div className="pagePanel">Page {this.props.pageNumber + 1}/ TotalPages {this.props.totalPages}</div>
         );
     }
 });
@@ -87,7 +87,7 @@ var ItemPagingList = React.createClass({
         var nextLink = this.state.data.nextLink ? (<NavigateLink name="next" onClick={this.nextData}></NavigateLink>) : '';
         var prevLink = this.state.data.prevLink ? (<NavigateLink name="prev" onClick={this.prevData}></NavigateLink>) : '';
         return (
-            <div className="itemList">
+            <div className="itemPagingList">
                 {itemNodes}
                 <PagePanel pageNumber={this.state.data.paging.pageNumber} totalPages={this.state.data.paging.totalPages}></PagePanel>
                 {prevLink}
